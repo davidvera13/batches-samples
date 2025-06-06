@@ -1,0 +1,38 @@
+watch:
+  directory: D:\\DSIPILOT_V9\\TESTWRITER\\IN
+output:
+  directory: D:\\DSIPILOT_V9\\TESTWRITER\\OUT
+
+spring:
+  application:
+    name: dsipilot-csv-parser
+  datasource:
+    url: jdbc:mysql://localhost:3306/dsipilot_batch?createDatabaseIfNotExist=true&serverTimezone=UTC
+    username: root
+    password: root
+    driverClassName: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    show-sql: true
+  batch:
+    job:
+      enabled: false #disabled job run at startup
+    jdbc:
+      initialize-schema: always
+
+logging:
+  level:
+    org.springframework.batch: INFO
+    org.springframework.jdbc.datasource.init.ScriptUtils: DEBUG
+
+columns:
+  names: VSP_STE_COD,VSP_CLI_NUM,VSP_IDENT_CT,VSP_NUM_SIN,VSP_DOMAINE,VSP_CIE_NUM_POL,VSP_CIE_COD,VSP_SOUS_DOMAINE,VSP_SERVICE,VSP_TYPE_DOC,NOM_DOCUMENT,VSP_DIRECTION,VSP_DATE_RECEPT_DOC,VSP_DATE_TRAIT_DOC,VSP_FLUX,VSP_CONFIDENTIALITE,VSP_STATUT,VSP_ID_GED,VSP_DATE_SUPPRES_DOC,VSP_CLI_NUM_EXT,VSP_SIN_NUM_CIE,VSP_SIN_NUM_EXT,VSP_CIE_LIB_EXT,VSP_REF_CONT_ARCHIV,VSP_COMMENTAIRE,LIB_DOSSIER_RACINE,VSP_LIB_DOSSIER_CLIENT,VSP_LIB_DOSSIER_CONTRAT,VSP_LIB_DOSSIER_SINISTRE,ENT_NOM_DOCUMENT
+  fileName: NOM_DOCUMENT
+
+
+
+

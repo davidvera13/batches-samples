@@ -32,7 +32,7 @@ public class CsvItemProcessor implements ItemProcessor<Map<String, String>, Docu
         DocumentEntity entity = new DocumentEntity();
         entity.setDocumentId(documentId);
         entity.setFileName(fileName);
-        entity.setFilePath(directoryToWatch + File.separator + fileName);
+        entity.setFilePath(directoryToWatch + "\\" + fileName);
         entity.setFileType(Files.probeContentType(Path.of(fileName)));
         return entity;
     }

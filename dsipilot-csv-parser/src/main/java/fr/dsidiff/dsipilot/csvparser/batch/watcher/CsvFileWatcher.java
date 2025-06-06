@@ -9,6 +9,7 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.Date;
@@ -48,7 +49,8 @@ public class CsvFileWatcher {
             for (WatchEvent<?> event : key.pollEvents()) {
                 String fileName = event.context().toString();
                 if (fileName.endsWith(".csv") || fileName.endsWith(".CSV")) {
-                    String fullPath = path.resolve(fileName).toString();
+                    String fullPath = setExtensionToLowerCase(path, fileName);
+                    // rename to lowercase ??
                     System.out.println("Detected new CSV: " + fullPath);
 
                     // Start stopwatch
@@ -56,7 +58,7 @@ public class CsvFileWatcher {
 
                     JobParameters params = new JobParametersBuilder()
                             .addString("filePath", fullPath)
-                            .addString("outputFile", outputDir + "\\" + fileName.replace(".csv", "_out.csv"))
+                            .addString("outputFile", outputDir + "\\" + fileName.replace(".csv", "_out.txt"))
                             .addDate("timestamp", new Date())
                             .toJobParameters();
 
@@ -75,6 +77,29 @@ public class CsvFileWatcher {
             }
             key.reset();
         }
+    }
+
+    private String setExtensionToLowerCase(
+            Path path,
+            String fileName) {
+        String fullPath = path.resolve(fileName).toString();
+        File originalFile = new File(fullPath);
+        int dotIndex = fileName.lastIndexOf('.');
+        String nameWithoutExtension = fileName.substring(0, dotIndex);
+        String extension = fileName.substring(dotIndex + 1);
+
+        // New filename with lowercase extension
+        String newFileName = nameWithoutExtension + "." + extension.toLowerCase();
+        // New file path
+        File renamedFile = new File(originalFile.getParent(), newFileName);
+        // Rename the file
+        if (originalFile.renameTo(renamedFile)) {
+            System.out.println("File renamed to: " + renamedFile.getPath());
+        } else {
+            System.out.println("Failed to rename the file.");
+        }
+        return renamedFile.getAbsolutePath();
+
     }
 
     public void stop() {
